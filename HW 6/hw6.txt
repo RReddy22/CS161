@@ -1,0 +1,98 @@
+﻿1. For each pair of atomic sentences, give the most general unifier if it exists:
+   1. d{x/A, y/A, z/B}
+   2. No unifier
+   3. {x/B, y/A}
+   4. {x/John, y/John}
+   5. No unifier
+
+
+2. Consider the following sentences:
+   1. Translate these sentences into formulas in first-order logic.
+A x (Food(x) => Likes(John, x))
+Food(Apples)
+Food(Chicken)
+A x E y ((Eats(y, x) & ~Kills(x, y)) => Food(x))
+A x E y ((Kills(x, y) => ~Alive(y))
+Eats(Bill, Peanuts) & Alive(Bill)
+A x (Eats(Bill, x) => Eats(Sue, x))
+
+
+   2. Convert the formulas of part (a) into CNF (also called clausal form).
+~Food(x) | Likes(John, x)
+Food(Apples)
+Food(Chicken)
+~Eats(F(x), x) | Kills(x, F(x)) | Food(x)
+~Kills(F(y), x) | ~Alive(y)
+Eats(Bill, Peanuts)
+Alive(Bill)
+~Eats(Bill, x) | Eats(Sue, x)
+
+
+   3. Prove that John likes peanuts using resolution.
+To prove that John likes peanuts, we must show ~Likes(John, Peanuts) is unsatisfiable: 
+* ~Likes(John, Peanuts)
+* ~Food(Peanuts) {x/Peanuts} - Using 1, 9
+* ~Eats(F(Peanuts), Peanuts) | Kills(Peanuts, F(Peanuts)) {x/Peanuts} - Using 4, 10
+* ~Eats(F(Peanuts), Peanuts) | ~Alive(F(Peanuts)) {y/Peanuts} - Using 5, 11
+* ~Alive(Bill) {F(Peanuts)/Bill} - Using 6, 12
+* Empty - Using 7, 13
+
+
+So, based on the Empty clause (7, 13), we can prove that  ~Likes(John, Peanuts) is unsatisfiable and can conclude that John likes peanuts. 
+
+
+   4. Use resolution to answer the question, “What does Sue eat?”
+We are trying to unify Eats(Sue, x) from the KB: 
+* Eats(Sue, Peanuts) {x/Peanuts}- Using 6, 8
+* Therefore, Sue eats peanuts.
+
+
+   5. Use resolution to answer (d) if, instead of the axiom marked with an asterisk above, we had:
+      1. If you don’t eat, you die.
+      2. If you die, you are not alive.
+      3. Bill is alive.
+New Statements: 
+* E y A x (~Eats(y,x) => Die(y))
+* Die(x) => ~Alive(x)
+* Alive(Bill)
+
+
+New KB: 
+* ~Food(x) | Likes(John, x)
+* Food(Apples) 
+* Food(Chicken)
+* ~Eats(F(x),x) | Kills(x,F(x)) | Food(x)
+* ~Kills(F(y),y) | ~Alive(y)
+* Eats(y, G(y)) | Die(y) 
+* ~Die(x) | ~Alive(x)
+* Alive(Bill)
+* ~Eats(Bill,x) | Eats(Sue,x)
+
+
+* Die(Bill) | Eats(Sue, G(Bill)) {y/Bill, x/G(y)} - Using 6, 9
+* ~Alive(Bill) | Eats(Sue, G(Bill)) {x/Bill} - Using 7, 10
+* Eats(Sue, G(Bill)) -  Using 8, 11
+
+
+3. Use RSat to solve the SAT instance obtained above.
+   1. (1). Is the instance satisfiable?
+The 3 colors-instance isn’t satisfiable.
+
+
+   2. (2). Is the instance satisfiable?
+The 4 colors-instance is indeed satisfiable.
+
+
+   3. (3). What do the answers of these two SAT instances tell you about the graph coloring problem of the above graph? Can you give a solution (a coloring) to the graph coloring problem of the above graph based on the results of Rsat?
+We need a minimum of 4 colors:
+1. Green 
+2. Red 
+3. Green 
+4. Red 
+5. Yellow 
+6. Blue 
+7. Yellow 
+
+
+   4. (4). What is the minimum number of colors required to properly color this graph?
+The minimum number of colors would be 8.
